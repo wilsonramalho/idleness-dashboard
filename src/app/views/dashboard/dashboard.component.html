@@ -54,9 +54,9 @@
             <td mat-cell *matCellDef="let row">{{row.name}}</td>
           </ng-container>
           <!-- Total Time Column -->
-          <ng-container matColumnDef="totalTime">
+          <ng-container matColumnDef="totalTimeFormatted">
             <th mat-header-cell mat-sort-header *matHeaderCellDef>Tempo Total</th>
-            <td mat-cell *matCellDef="let row">{{row.totalTime}}</td>
+            <td mat-cell *matCellDef="let row">{{row.totalTimeFormatted}}</td>
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

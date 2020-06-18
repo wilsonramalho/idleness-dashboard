@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
   wastedHoursView: string;
   sumMinutes: number = 0;
   sumDays: number = 0;
-  displayedColumns = ['recurrence', 'name', 'totalTime'];
+  displayedColumns = ['recurrence', 'name', 'totalTimeFormatted'];
   eventSubscription: Subscription;
   dataSource: any;
 
@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
     private sharedService: SharedService
   ) {
     this.eventSubscription = this.sharedService.receiveEvent().subscribe(() => {
-      this.loadData();
+      this._loadData();
       this.bottomSheet.dismiss();
     });
   }
@@ -51,14 +51,14 @@ export class DashboardComponent implements OnInit {
     this.bottomSheet.open(BottonSheetFormComponent);
   }
 
-  totalHours(array): void {
+  _totalHours(array): void {
     array.forEach((time) => {
       this.sumMinutes += time.timeSpent;
     });
     this.hoursView = moment.duration(this.sumMinutes, 'minutes').format('h:mm[h]');
   }
 
-  totalDays(array): void {
+  _totalDays(array): void {
     let tempDate: string;
     array.forEach((date) => {
       if (date.date !== tempDate) {
@@ -69,29 +69,31 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  totalWastedHours(): void {
+  _totalWastedHours(): void {
     let tempHours: number;
     tempHours =
       moment.duration(this.sumDays * 8, 'hours').asMinutes() - this.sumMinutes;
     this.wastedHoursView = moment.duration(tempHours, 'minutes').format('h:mm[h]');
   }
 
-  taskList(array): void {
+  _formatTime(time): string {
+    return moment.duration(time, 'minutes').format('h[ h e] m[ min]', { trim: 'all' });
+  }
+
+  _taskList(array): void {
     array.forEach((element) => {
       if (this.tasks.some((e) => e.name === element.task)) {
         this.tasks.find((item) => item.name === element.task).recurrence++;
         this.tasks.find((item) => item.name === element.task).totalTime += element.timeSpent;
+        this.tasks.find((item) => item.name === element.task).totalTimeFormatted = this._formatTime(this.tasks.find((item) => item.name === element.task).totalTime);
       } else {
         this.tasks.push({
           name: element.task,
           recurrence: 1,
           totalTime: element.timeSpent,
+          totalTimeFormatted: this._formatTime(element.timeSpent)
         });
       }
-    });
-
-    this.tasks.forEach((task) => {
-      task.totalTime = moment.duration(task.totalTime, 'minutes').format('h[ h], m[ min]', { trim: 'all' });
     });
     this.dataSource = new MatTableDataSource(this.tasks);
     this.dataSource.sort = this.sort;
@@ -99,20 +101,20 @@ export class DashboardComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  loadData(): void {
+  _loadData(): void {
     this.sumDays = 0;
     this.sumMinutes = 0;
     this.dashboardService.read().subscribe((dates) => {
     this.dates = dates;
-    this.taskList(this.dates);
-    this.totalDays(this.dates);
-    this.totalHours(this.dates);
-    this.totalWastedHours();
+    this._taskList(this.dates);
+    this._totalDays(this.dates);
+    this._totalHours(this.dates);
+    this._totalWastedHours();
     });
   }
 
   ngOnInit(): void {
-    this.loadData();
+    this._loadData();
     this.paginator._intl.itemsPerPageLabel = 'Itens por página';
     this.paginator._intl.previousPageLabel = 'Página anterior';
     this.paginator._intl.nextPageLabel = 'Próxima página';
