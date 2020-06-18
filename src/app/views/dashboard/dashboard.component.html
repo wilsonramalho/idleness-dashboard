@@ -1,0 +1,79 @@
+<div class="row three">
+  <mat-card>
+    <mat-card-header>
+        <mat-card-title>
+          <mat-icon>schedule</mat-icon>
+          <span>Horas totais trabalhadas</span>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        {{ hoursView }}
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+        <mat-card-title>
+          <mat-icon>today</mat-icon>
+          <span>Dias contabilizados</span>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        {{ daysView }}
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>delete</mat-icon>
+        <span>Horas desperdiçadas</span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        {{ wastedHoursView }}
+    </mat-card-content>
+  </mat-card>
+</div>
+<div class="row two">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>playlist_add_check</mat-icon>
+        <span>Tarefas Executadas</span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <table mat-table matSort #table [dataSource]="dataSource">
+          <!-- Recurrence Column -->
+          <ng-container matColumnDef="recurrence">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Recorrência</th>
+            <td mat-cell *matCellDef="let row">{{row.recurrence}}</td>
+          </ng-container>
+          <!-- Task Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Tarefa</th>
+            <td mat-cell *matCellDef="let row">{{row.name}}</td>
+          </ng-container>
+          <!-- Total Time Column -->
+          <ng-container matColumnDef="totalTime">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Tempo Total</th>
+            <td mat-cell *matCellDef="let row">{{row.totalTime}}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5]"></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon></mat-icon>
+        <span></span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+<button mat-fab class="add-task" (click)="openBottonSheet()"><mat-icon>add_alarm</mat-icon></button>
