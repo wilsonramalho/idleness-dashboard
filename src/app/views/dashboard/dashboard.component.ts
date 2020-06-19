@@ -32,6 +32,17 @@ export class DashboardComponent implements OnInit {
   displayedColumns = ['recurrence', 'name', 'totalTimeFormatted'];
   eventSubscription: Subscription;
   dataSource: any;
+  doughnutChartLabels: Array<string> = [];
+  doughnutChartData: Array<number> = [];
+  doughnutChartType = 'doughnut';
+  doughnutChartOptions = {
+    legend: {
+      position: 'left'
+    }
+  };
+  doughnutChartColors = [{
+    backgroundColor: []
+  }];
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -77,7 +88,7 @@ export class DashboardComponent implements OnInit {
   }
 
   _formatTime(time): string {
-    return moment.duration(time, 'minutes').format('h[ h e] m[ min]', { trim: 'all' });
+    return moment.duration(time, 'minutes').format('h[ h] [e ]m[ min]', { trim: 'all' });
   }
 
   _taskList(array): void {
@@ -110,7 +121,24 @@ export class DashboardComponent implements OnInit {
     this._totalDays(this.dates);
     this._totalHours(this.dates);
     this._totalWastedHours();
+    this._createDashboardData();
     });
+  }
+
+  _dynamicColors():string {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    return "rgb(" + r + "," + g + "," + b + ")";
+  }
+
+  _createDashboardData(): void {
+    this.tasks.forEach((task) => {
+      this.doughnutChartLabels.push(task.name);
+      this.doughnutChartData.push(task.recurrence);
+      this.doughnutChartColors[0].backgroundColor.push(this._dynamicColors());
+    });
+    console.log(this.doughnutChartOptions);
   }
 
   ngOnInit(): void {

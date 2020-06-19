@@ -1,7 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { registerLocaleData } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import localePt from '@angular/common/locales/pt';
 
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -20,12 +23,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { BottonSheetFormComponent } from './views/botton-sheet-form/botton-sheet-form.component';
 
-import localePt from '@angular/common/locales/pt';
-import { registerLocaleData } from '@angular/common';
+import { ChartsModule } from 'ng2-charts';
 
 registerLocaleData(localePt);
 
@@ -42,6 +43,7 @@ registerLocaleData(localePt);
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    ChartsModule,
     MatNativeDateModule,
     MatToolbarModule,
     MatIconModule,

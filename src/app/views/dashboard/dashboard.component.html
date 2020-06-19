@@ -72,7 +72,12 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-
+      <canvas baseChart
+              [data]="doughnutChartData"
+              [labels]="doughnutChartLabels"
+              [chartType]="doughnutChartType"
+              [options]="doughnutChartOptions"
+              [colors]="doughnutChartColors"></canvas>
     </mat-card-content>
   </mat-card>
 </div>
