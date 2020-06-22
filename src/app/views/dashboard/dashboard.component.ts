@@ -88,7 +88,7 @@ export class DashboardComponent implements OnInit {
   }
 
   _formatTime(time): string {
-    return moment.duration(time, 'minutes').format('h[ h] [e ]m[ min]', { trim: 'all' });
+    return moment.duration(time, 'minutes').format('h[ h] m[ min]', { trim: 'all' });
   }
 
   _taskList(array): void {
@@ -115,6 +115,12 @@ export class DashboardComponent implements OnInit {
   _loadData(): void {
     this.sumDays = 0;
     this.sumMinutes = 0;
+    this.tasks = [];
+    this.doughnutChartLabels = [];
+    this.doughnutChartData = [];
+    this.doughnutChartColors = [{
+      backgroundColor: []
+    }];
     this.dashboardService.read().subscribe((dates) => {
     this.dates = dates;
     this._taskList(this.dates);
@@ -138,7 +144,6 @@ export class DashboardComponent implements OnInit {
       this.doughnutChartData.push(task.recurrence);
       this.doughnutChartColors[0].backgroundColor.push(this._dynamicColors());
     });
-    console.log(this.doughnutChartOptions);
   }
 
   ngOnInit(): void {
