@@ -1,10 +1,13 @@
 import { SharedService } from './../../shared.service';
 import { BottonSheetFormService } from './botton-sheet-form.service';
 import { Dates } from './../dashboard/dates.model';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
+import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
+
 import * as moment from 'moment';
+import 'moment-duration-format';
 
 const VALUES = [
   {value: 'Análise', viewValue: 'Análise'},
@@ -32,9 +35,10 @@ export class BottonSheetFormComponent implements OnInit {
   today = new FormControl(new Date());
   sendingData: boolean = false;
 
-  constructor(private bottomSheetFormService: BottonSheetFormService, private sharedService: SharedService) { }
+  constructor(private bottomSheetFormService: BottonSheetFormService, private sharedService: SharedService, @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) { }
 
   ngOnInit(): void {
+    this.date.timeSpent = Math.round(moment.duration(this.data.timeSpent, 'milliseconds').asMinutes());
   }
 
   registerWork(): void {

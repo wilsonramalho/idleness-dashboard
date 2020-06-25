@@ -1,0 +1,11 @@
+<button
+  class="counter"
+  mat-fab
+  [ngClass]="{'shown' : this.isRunning || this._counter != 0}"
+  color="primary">{{viewCounter}}</button>
+<button
+  class="add-task"
+  (click)="go()"
+  mat-fab>
+    <mat-icon>{{statusIcon}}</mat-icon>
+</button>

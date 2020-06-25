@@ -22,6 +22,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule, MatTooltip } from '@angular/material/tooltip';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -29,6 +30,7 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { BottonSheetFormComponent } from './views/botton-sheet-form/botton-sheet-form.component';
 
 import { ChartsModule } from 'ng2-charts';
+import { StopwatchComponent } from './components/stopwatch/stopwatch.component';
 
 registerLocaleData(localePt);
 
@@ -36,7 +38,8 @@ registerLocaleData(localePt);
   declarations: [
     AppComponent,
     DashboardComponent,
-    BottonSheetFormComponent
+    BottonSheetFormComponent,
+    StopwatchComponent
   ],
   imports: [
     BrowserModule,
@@ -61,7 +64,8 @@ registerLocaleData(localePt);
     MatInputModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatTooltipModule
   ],
   providers: [{
     provide: LOCALE_ID,

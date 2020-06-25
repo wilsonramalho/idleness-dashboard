@@ -1,5 +1,4 @@
 import { SharedService } from './../../shared.service';
-import { BottonSheetFormComponent } from './../botton-sheet-form/botton-sheet-form.component';
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { DashboardService } from './dashboard.service';
@@ -57,10 +56,6 @@ export class DashboardComponent implements OnInit {
       this.bottomSheet.dismiss();
       this.sharedService.spin$.next(false);
     });
-  }
-
-  openBottonSheet(): void {
-    this.bottomSheet.open(BottonSheetFormComponent);
   }
 
   _totalHours(array): void {

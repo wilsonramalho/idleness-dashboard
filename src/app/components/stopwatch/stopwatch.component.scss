@@ -1,0 +1,21 @@
+.add-task {
+  position: fixed;
+  bottom: 5%;
+  right: 3%;
+  z-index: 800;
+}
+
+.counter {
+  position: fixed;
+  right: 3%;
+  bottom: 5%;
+  z-index: 1;
+  opacity: 0;
+  &.shown {
+    bottom: 16%;
+    opacity: 1;
+    transition: all 0.2s ease;
+  }
+}
+
+
