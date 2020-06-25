@@ -55,6 +55,7 @@ export class DashboardComponent implements OnInit {
     this.eventSubscription = this.sharedService.receiveEvent().subscribe(() => {
       this._loadData();
       this.bottomSheet.dismiss();
+      this.sharedService.spin$.next(false);
     });
   }
 

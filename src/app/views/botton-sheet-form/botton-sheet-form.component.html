@@ -20,7 +20,7 @@
 
     </mat-form-field>
   </div>
-  <button mat-raised-button color="primary" (click)="registerWork()" [disabled]="registerForm.form.invalid">
+  <button mat-raised-button color="primary" (click)="registerWork()" [disabled]="registerForm.form.invalid || sendingData">
     Registrar
   </button>
 </form>

@@ -30,6 +30,7 @@ export class BottonSheetFormComponent implements OnInit {
     task: ''
   };
   today = new FormControl(new Date());
+  sendingData: boolean = false;
 
   constructor(private bottomSheetFormService: BottonSheetFormService, private sharedService: SharedService) { }
 
@@ -37,6 +38,8 @@ export class BottonSheetFormComponent implements OnInit {
   }
 
   registerWork(): void {
+    this.sharedService.spin$.next(true);
+    this.sendingData = true;
     this.date.date = moment(this.today.value).format('YYYY-MM-DD');
     this.date.timeSpent = Number(this.date.timeSpent);
     this.bottomSheetFormService.create(this.date).subscribe(() => {
