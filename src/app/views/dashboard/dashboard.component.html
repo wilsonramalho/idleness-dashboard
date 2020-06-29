@@ -79,33 +79,40 @@
     <mat-card-content>
       <canvas baseChart
     [datasets]="radarChartData"
-    [options]="radarChartOptions"
+    [options]="genericChartOptions"
     [labels]="radarChartLabels"
     [chartType]="radarChartType">
   </canvas>
     </mat-card-content>
   </mat-card>
 </div>
-<!-- <div class="row two">
+<div class="row two">
   <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>thumbs_up_down</mat-icon>
+        <span>Horas trabalhadas X Horas desperdiçadas</span>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <canvas baseChart
+    [data]="doughnutChartData"
+    [options]="genericChartOptions"
+    [labels]="doughnutChartLabels"
+    [chartType]="doughnutChartType"
+    [colors]="doughnutChartColors">
+  </canvas>
+    </mat-card-content>
+  </mat-card>
+  <!-- <mat-card>
     <mat-card-content>
       <canvas baseChart
     [datasets]="radarChartData"
-    [options]="radarChartOptions"
+    [options]="genericChartOptions"
     [labels]="radarChartLabels"
     [chartType]="radarChartType">
   </canvas>
     </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-content>
-      <canvas baseChart
-    [datasets]="radarChartData"
-    [options]="radarChartOptions"
-    [labels]="radarChartLabels"
-    [chartType]="radarChartType">
-  </canvas>
-    </mat-card-content>
-  </mat-card>
-</div> -->
+  </mat-card> -->
+</div>
 <app-stopwatch></app-stopwatch>

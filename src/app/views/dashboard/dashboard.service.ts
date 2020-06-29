@@ -18,6 +18,7 @@ export class DashboardService {
   private sumMinutes = 0;
   private sumDays = 0;
   private tasks: Task[] = [];
+  arrayHours = [];
 
   constructor(private http: HttpClient) { }
 
@@ -61,6 +62,8 @@ export class DashboardService {
   totalWastedHours(): string {
     let tempHours: number;
     tempHours = moment.duration(this.sumDays * 8, 'hours').asMinutes() - this.sumMinutes;
+    this.arrayHours.push(Math.round(moment.duration(this.sumMinutes, 'minutes').asHours()), Math.round(moment.duration(tempHours, 'minutes').asHours()));
+
     return moment.duration(tempHours, 'minutes').format('h:mm[h]');
   }
 

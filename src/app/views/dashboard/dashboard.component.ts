@@ -12,8 +12,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
-import { ChartDataSets, RadialChartOptions, ChartType } from 'chart.js';
-import { Label } from 'ng2-charts';
+import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
+import { Label, SingleDataSet } from 'ng2-charts';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class DashboardComponent implements OnInit {
   displayedColumns = ['recurrence', 'name', 'totalTimeFormatted'];
   eventSubscription: Subscription;
   dataSource: any;
-  public radarChartOptions: RadialChartOptions = {
+  public genericChartOptions: ChartOptions = {
     responsive: true,
     legend: {
       position: 'right'
@@ -42,10 +42,13 @@ export class DashboardComponent implements OnInit {
     label: 'Recorrência'
   }];
   public radarChartLabels: Label[] = [];
-  // public radarChartColors = [{
-  //   backgroundColor: []
-  // }];
+  public doughnutChartColors = [{
+    backgroundColor: []
+  }];
   public radarChartType: ChartType = 'radar';
+  public doughnutChartData: SingleDataSet = [];
+  public doughnutChartLabels: Label[] = ['Horas trabalhadas', 'Horas desperdiçadas'];
+  public doughnutChartType: ChartType = 'doughnut';
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -77,7 +80,8 @@ export class DashboardComponent implements OnInit {
     this.hoursView = this.dashboardService.totalHours(this.dates);
     this.avgHoursView = this.dashboardService.averageHours();
     this.wastedHoursView = this.dashboardService.totalWastedHours();
-    this.createDashboardData();
+    this.createRadarData();
+    this.createDoughtnutData();
     this.prepareTable();
     });
   }
@@ -89,7 +93,14 @@ export class DashboardComponent implements OnInit {
     return `rgb(${r},${g},${b})`;
   }
 
-  private createDashboardData(): void {
+  private createDoughtnutData(): void {
+    this.doughnutChartData = this.dashboardService.arrayHours;
+    this.doughnutChartData.forEach(() => {
+      this.doughnutChartColors[0].backgroundColor.push(this.dynamicColors());
+    });
+  }
+
+  private createRadarData(): void {
     this.radarChartData = [
       { data: [], label: 'Recorrência' }
     ];
@@ -97,7 +108,6 @@ export class DashboardComponent implements OnInit {
     this.tasksView.forEach((task) => {
       this.radarChartLabels.push(task.name);
       this.radarChartData[0].data.push(task.recurrence);
-      //this.radarChartColors[0].backgroundColor.push(this.dynamicColors());
     });
   }
 
