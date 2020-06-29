@@ -1,18 +1,18 @@
 .add-task {
   position: fixed;
-  bottom: 5%;
-  right: 3%;
+  bottom: 25px;
+  right: 25px;
   z-index: 800;
 }
 
 .counter {
   position: fixed;
-  right: 3%;
-  bottom: 5%;
+  right: 25px;
+  bottom: 25px;
   z-index: 1;
   opacity: 0;
   &.shown {
-    bottom: 16%;
+    bottom: 100px;
     opacity: 1;
     transition: all 0.2s ease;
   }

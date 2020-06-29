@@ -1,4 +1,4 @@
-<div class="row three">
+<div class="row four">
   <mat-card>
     <mat-card-header>
         <mat-card-title>
@@ -8,6 +8,17 @@
     </mat-card-header>
     <mat-card-content>
         {{ hoursView }}
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-header>
+        <mat-card-title>
+          <mat-icon>hourglass_top</mat-icon>
+          <span>Média de horas por dia</span>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        {{ avgHoursView }}
     </mat-card-content>
   </mat-card>
   <mat-card>
@@ -67,12 +78,34 @@
   <mat-card>
     <mat-card-content>
       <canvas baseChart
-              [data]="doughnutChartData"
-              [labels]="doughnutChartLabels"
-              [chartType]="doughnutChartType"
-              [options]="doughnutChartOptions"
-              [colors]="doughnutChartColors"></canvas>
+    [datasets]="radarChartData"
+    [options]="radarChartOptions"
+    [labels]="radarChartLabels"
+    [chartType]="radarChartType">
+  </canvas>
     </mat-card-content>
   </mat-card>
 </div>
+<!-- <div class="row two">
+  <mat-card>
+    <mat-card-content>
+      <canvas baseChart
+    [datasets]="radarChartData"
+    [options]="radarChartOptions"
+    [labels]="radarChartLabels"
+    [chartType]="radarChartType">
+  </canvas>
+    </mat-card-content>
+  </mat-card>
+  <mat-card>
+    <mat-card-content>
+      <canvas baseChart
+    [datasets]="radarChartData"
+    [options]="radarChartOptions"
+    [labels]="radarChartLabels"
+    [chartType]="radarChartType">
+  </canvas>
+    </mat-card-content>
+  </mat-card>
+</div> -->
 <app-stopwatch></app-stopwatch>

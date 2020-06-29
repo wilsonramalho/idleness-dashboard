@@ -5,7 +5,6 @@ import { DashboardService } from './dashboard.service';
 import { Dates } from './dates.model';
 import { Task } from './task.model';
 
-import * as moment from 'moment';
 import 'moment-duration-format';
 
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -13,6 +12,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
+import { ChartDataSets, RadialChartOptions, ChartType } from 'chart.js';
+import { Label } from 'ng2-charts';
+import { timeStamp } from 'console';
 
 
 @Component({
@@ -22,26 +24,29 @@ import { Subscription } from 'rxjs';
 })
 export class DashboardComponent implements OnInit {
   dates: Dates[];
-  tasks: Task[] = [];
+  tasksView: Task[] = [];
+  avgHoursView: string;
   hoursView: string;
   daysView: string;
   wastedHoursView: string;
-  sumMinutes: number = 0;
-  sumDays: number = 0;
   displayedColumns = ['recurrence', 'name', 'totalTimeFormatted'];
   eventSubscription: Subscription;
   dataSource: any;
-  doughnutChartLabels: Array<string> = [];
-  doughnutChartData: Array<number> = [];
-  doughnutChartType = 'doughnut';
-  doughnutChartOptions = {
+  public radarChartOptions: RadialChartOptions = {
+    responsive: true,
     legend: {
-      position: 'left'
+      position: 'right'
     }
   };
-  doughnutChartColors = [{
-    backgroundColor: []
+  public radarChartData: ChartDataSets[] = [{
+    data: [],
+    label: 'Recorrência'
   }];
+  public radarChartLabels: Label[] = [];
+  // public radarChartColors = [{
+  //   backgroundColor: []
+  // }];
+  public radarChartType: ChartType = 'radar';
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -52,98 +57,52 @@ export class DashboardComponent implements OnInit {
     private sharedService: SharedService
   ) {
     this.eventSubscription = this.sharedService.receiveEvent().subscribe(() => {
-      this._loadData();
+      this.loadData();
       this.bottomSheet.dismiss();
       this.sharedService.spin$.next(false);
     });
   }
 
-  _totalHours(array): void {
-    array.forEach((time) => {
-      this.sumMinutes += time.timeSpent;
-    });
-    this.hoursView = moment.duration(this.sumMinutes, 'minutes').format('h:mm[h]');
-  }
-
-  _totalDays(array): void {
-    let tempDate: string;
-    array.forEach((date) => {
-      if (date.date !== tempDate) {
-        tempDate = date.date;
-        this.sumDays++;
-      }
-      this.daysView = this.sumDays + ' dias';
-    });
-  }
-
-  _totalWastedHours(): void {
-    let tempHours: number;
-    tempHours =
-      moment.duration(this.sumDays * 8, 'hours').asMinutes() - this.sumMinutes;
-    this.wastedHoursView = moment.duration(tempHours, 'minutes').format('h:mm[h]');
-  }
-
-  _formatTime(time): string {
-    return moment.duration(time, 'minutes').format('h[ h] m[ min]', { trim: 'all' });
-  }
-
-  _taskList(array): void {
-    array.forEach((element) => {
-      if (this.tasks.some((e) => e.name === element.task)) {
-        this.tasks.find((item) => item.name === element.task).recurrence++;
-        this.tasks.find((item) => item.name === element.task).totalTime += element.timeSpent;
-        this.tasks.find((item) => item.name === element.task).totalTimeFormatted = this._formatTime(this.tasks.find((item) => item.name === element.task).totalTime);
-      } else {
-        this.tasks.push({
-          name: element.task,
-          recurrence: 1,
-          totalTime: element.timeSpent,
-          totalTimeFormatted: this._formatTime(element.timeSpent)
-        });
-      }
-    });
-    this.dataSource = new MatTableDataSource(this.tasks);
+  private prepareTable(): void {
+    this.dataSource = new MatTableDataSource(this.tasksView);
     this.dataSource.sort = this.sort;
     this.dataSource.sort.sort({ id: 'recurrence', start: 'desc', disableClear: false });
     this.dataSource.paginator = this.paginator;
   }
 
-  _loadData(): void {
-    this.sumDays = 0;
-    this.sumMinutes = 0;
-    this.tasks = [];
-    this.doughnutChartLabels = [];
-    this.doughnutChartData = [];
-    this.doughnutChartColors = [{
-      backgroundColor: []
-    }];
+  private loadData(): void {
     this.dashboardService.read().subscribe((dates) => {
     this.dates = dates;
-    this._taskList(this.dates);
-    this._totalDays(this.dates);
-    this._totalHours(this.dates);
-    this._totalWastedHours();
-    this._createDashboardData();
+    this.tasksView = this.dashboardService.taskList(this.dates);
+    this.daysView = this.dashboardService.totalDays(this.dates);
+    this.hoursView = this.dashboardService.totalHours(this.dates);
+    this.avgHoursView = this.dashboardService.averageHours();
+    this.wastedHoursView = this.dashboardService.totalWastedHours();
+    this.createDashboardData();
+    this.prepareTable();
     });
   }
 
-  _dynamicColors():string {
+  private dynamicColors(): string {
     const r = Math.floor(Math.random() * 255);
     const g = Math.floor(Math.random() * 255);
     const b = Math.floor(Math.random() * 255);
-    return "rgb(" + r + "," + g + "," + b + ")";
+    return `rgb(${r},${g},${b})`;
   }
 
-  _createDashboardData(): void {
-    this.tasks.forEach((task) => {
-      this.doughnutChartLabels.push(task.name);
-      this.doughnutChartData.push(task.recurrence);
-      this.doughnutChartColors[0].backgroundColor.push(this._dynamicColors());
+  private createDashboardData(): void {
+    this.radarChartData = [
+      { data: [], label: 'Recorrência' }
+    ];
+    this.radarChartLabels = [];
+    this.tasksView.forEach((task) => {
+      this.radarChartLabels.push(task.name);
+      this.radarChartData[0].data.push(task.recurrence);
+      //this.radarChartColors[0].backgroundColor.push(this.dynamicColors());
     });
   }
 
-  ngOnInit(): void {
-    this._loadData();
+  private translatePaginatorBr(): void {
     this.paginator._intl.itemsPerPageLabel = 'Itens por página';
     this.paginator._intl.previousPageLabel = 'Página anterior';
     this.paginator._intl.nextPageLabel = 'Próxima página';
@@ -154,5 +113,10 @@ export class DashboardComponent implements OnInit {
       const endIndex = startIndex < length ? Math.min(startIndex + pageSize, length) : startIndex + pageSize;
       return `${startIndex + 1} - ${endIndex} de ${length}`;
     };
+  }
+
+  ngOnInit(): void {
+    this.loadData();
+    this.translatePaginatorBr();
   }
 }

@@ -1,7 +1,7 @@
 .row {
   display: flex;
   justify-content: center;
-  padding: 15px 15px 0 0;
+  padding: 0 15px 0 0;
   mat-card {
     margin: 0 0 15px 15px;
     mat-card-header {
@@ -25,9 +25,17 @@
       }
     }
   }
+  &.four {
+    mat-card {
+      width: calc(25% - 15px);
+    }
+  }
   &.three {
     mat-card {
       width: calc(33.333% - 15px);
+      mat-card-content {
+        flex-direction: column;
+      }
     }
   }
   &.two {

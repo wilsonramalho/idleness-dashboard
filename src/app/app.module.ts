@@ -22,7 +22,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTooltipModule, MatTooltip } from '@angular/material/tooltip';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -64,8 +63,7 @@ registerLocaleData(localePt);
     MatInputModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule
+    MatProgressSpinnerModule
   ],
   providers: [{
     provide: LOCALE_ID,
