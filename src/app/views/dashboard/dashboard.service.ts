@@ -60,6 +60,7 @@ export class DashboardService {
   }
 
   totalWastedHours(): string {
+    this.arrayHours = [];
     let tempHours: number;
     tempHours = moment.duration(this.sumDays * 8, 'hours').asMinutes() - this.sumMinutes;
     this.arrayHours.push(Math.round(moment.duration(this.sumMinutes, 'minutes').asHours()), Math.round(moment.duration(tempHours, 'minutes').asHours()));
