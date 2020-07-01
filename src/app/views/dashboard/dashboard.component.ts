@@ -114,6 +114,7 @@ export class DashboardComponent implements OnInit {
     this.createRadarData();
     this.createDoughtnutData();
     this.prepareTable();
+    this.sharedService.spin$.next(false);
     });
   }
 
@@ -155,7 +156,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.lineChartLabels.length);
+    this.sharedService.spin$.next(true);
     this.loadData();
     this.translatePaginatorBr();
   }
