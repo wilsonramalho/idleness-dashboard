@@ -36,6 +36,13 @@ export class DashboardService {
     console.log(e);
     return;
   }
+
+  dynamicColors(): string {
+    const r = Math.floor(Math.random() * 255);
+    const g = Math.floor(Math.random() * 255);
+    const b = Math.floor(Math.random() * 255);
+    return `rgb(${r},${g},${b})`;
+  }
   totalHours(array): string {
     this.sumMinutes = 0;
     array.forEach((time) => {
@@ -85,5 +92,27 @@ export class DashboardService {
       }
     });
     return this.tasks;
+  }
+
+  taskByDay(array): any {
+    const tempArray = {
+      data: [],
+      labels: []
+    };
+    let tempDate = '';
+    let tempCount = 0;
+    array.forEach((data) => {
+      if (data.date !== tempDate) {
+        tempArray.labels.push(moment(data.date).format('D/M'));
+        tempDate = data.date;
+        tempCount = 1;
+        tempArray.data.push(tempCount);
+      } else {
+        tempCount++;
+        tempArray.data.pop();
+        tempArray.data.push(tempCount);
+      }
+    });
+    return tempArray;
   }
 }

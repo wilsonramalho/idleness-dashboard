@@ -13,7 +13,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 import { ChartDataSets, ChartType, ChartOptions } from 'chart.js';
-import { Label, SingleDataSet } from 'ng2-charts';
+import { Label, SingleDataSet, Color } from 'ng2-charts';
 
 
 @Component({
@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit {
   public genericChartOptions: ChartOptions = {
     responsive: true,
     legend: {
-      position: 'right'
+      display: false
     }
   };
   public radarChartData: ChartDataSets[] = [{
@@ -49,6 +49,22 @@ export class DashboardComponent implements OnInit {
   public doughnutChartData: SingleDataSet = [];
   public doughnutChartLabels: Label[] = ['Horas trabalhadas', 'Horas desperdiçadas'];
   public doughnutChartType: ChartType = 'doughnut';
+  public lineChartData: ChartDataSets[] = [{
+    data: [],
+    label: 'Atividades'
+  }];
+  public lineChartLabels: Label[] = [];
+  public lineChartColors: Color[] = [
+    { // grey
+      backgroundColor: 'rgba(148,159,177,0.2)',
+      borderColor: 'rgba(148,159,177,1)',
+      pointBackgroundColor: 'rgba(148,159,177,1)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+    }
+  ]
+  public lineChartType = 'line';
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -80,23 +96,23 @@ export class DashboardComponent implements OnInit {
     this.hoursView = this.dashboardService.totalHours(this.dates);
     this.avgHoursView = this.dashboardService.averageHours();
     this.wastedHoursView = this.dashboardService.totalWastedHours();
+    this.createLineData(this.dates);
     this.createRadarData();
     this.createDoughtnutData();
     this.prepareTable();
     });
   }
 
-  private dynamicColors(): string {
-    const r = Math.floor(Math.random() * 255);
-    const g = Math.floor(Math.random() * 255);
-    const b = Math.floor(Math.random() * 255);
-    return `rgb(${r},${g},${b})`;
+  private createLineData(array): void {
+    const chartData = this.dashboardService.taskByDay(array);
+    this.lineChartData[0].data = chartData.data;
+    this.lineChartLabels = chartData.labels;
   }
 
   private createDoughtnutData(): void {
     this.doughnutChartData = this.dashboardService.arrayHours;
     this.doughnutChartData.forEach(() => {
-      this.doughnutChartColors[0].backgroundColor.push(this.dynamicColors());
+      this.doughnutChartColors[0].backgroundColor.push(this.dashboardService.dynamicColors());
     });
   }
 
@@ -125,6 +141,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.lineChartLabels.length);
     this.loadData();
     this.translatePaginatorBr();
   }

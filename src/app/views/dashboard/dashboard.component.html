@@ -104,15 +104,23 @@
   </canvas>
     </mat-card-content>
   </mat-card>
-  <!-- <mat-card>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>timeline</mat-icon>
+        <span>Atividades por dia</span>
+      </mat-card-title>
+    </mat-card-header>
     <mat-card-content>
       <canvas baseChart
-    [datasets]="radarChartData"
-    [options]="genericChartOptions"
-    [labels]="radarChartLabels"
-    [chartType]="radarChartType">
+      [datasets]="lineChartData"
+                [labels]="lineChartLabels"
+                [options]="genericChartOptions"
+                [colors]="lineChartColors"
+                [chartType]="lineChartType">
   </canvas>
     </mat-card-content>
-  </mat-card> -->
+  </mat-card>
 </div>
+<div class="spacer"></div>
 <app-stopwatch></app-stopwatch>
