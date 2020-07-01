@@ -54,17 +54,31 @@ export class DashboardComponent implements OnInit {
     label: 'Atividades'
   }];
   public lineChartLabels: Label[] = [];
-  public lineChartColors: Color[] = [
-    { // grey
-      backgroundColor: 'rgba(148,159,177,0.2)',
-      borderColor: 'rgba(148,159,177,1)',
-      pointBackgroundColor: 'rgba(148,159,177,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-    }
-  ]
+  public lineChartColors: Color[] = [{
+    backgroundColor: 'rgba(148,159,177,0.2)',
+    borderColor: 'rgba(148,159,177,1)',
+    pointBackgroundColor: 'rgba(148,159,177,1)',
+    pointBorderColor: '#fff',
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderColor: 'rgba(148,159,177,0.8)'
+  }];
   public lineChartType = 'line';
+  public lineChartOptions: ChartOptions = {
+    responsive: true,
+    legend: {
+      display: false
+    },
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            stepSize: 1,
+            beginAtZero: true
+          }
+        }
+      ]
+    }
+  };
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
