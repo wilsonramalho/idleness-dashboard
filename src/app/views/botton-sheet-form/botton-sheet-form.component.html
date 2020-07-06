@@ -4,13 +4,13 @@
 </header>
 <form #registerForm="ngForm">
   <mat-form-field class="single">
-    <mat-select placeholder="Tarefa" required name="task" [(ngModel)]="date.task">
+    <mat-select placeholder="Tarefa" required name="task" [(ngModel)]="date.task" [disabled]="isAllDayIdle">
       <mat-option *ngFor="let option of options" [value]="option.value">{{ option.viewValue }}</mat-option>
     </mat-select>
   </mat-form-field>
   <div class="double">
     <mat-form-field>
-      <input matInput type="number" required placeholder="Minutos trabalhados" name="time" [(ngModel)]="date.timeSpent">
+      <input matInput type="number" required placeholder="Minutos trabalhados" name="time" [(ngModel)]="date.timeSpent" [disabled]="isAllDayIdle">
 
     </mat-form-field>
     <mat-form-field>
@@ -20,6 +20,9 @@
 
     </mat-form-field>
   </div>
+  <mat-slide-toggle [(ngModel)]="isAllDayIdle" (change)="switchIdleness()" name="isAllDayIdle" color="primary">
+      Jornada diária sem atividades
+  </mat-slide-toggle>
   <button mat-raised-button color="primary" (click)="registerWork()" [disabled]="registerForm.form.invalid || sendingData">
     Registrar
   </button>

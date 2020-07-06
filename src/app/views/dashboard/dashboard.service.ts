@@ -46,13 +46,15 @@ export class DashboardService {
   totalHours(array): string {
     this.sumMinutes = 0;
     array.forEach((time) => {
-      this.sumMinutes += time.timeSpent;
+      if (time.task !== 'Nenhuma atividade') {
+        this.sumMinutes += time.timeSpent;
+      }
     });
     return moment.duration(this.sumMinutes, 'minutes').format('h:mm[h]');
   }
 
   averageHours(): string {
-    return moment.duration(moment.duration(this.sumMinutes, 'minutes').asHours() / this.sumDays, 'hours').format('h:mm[h]');
+    return moment.duration(moment.duration(this.sumMinutes, 'minutes').asHours() / this.sumDays, 'hours').locale('pt-BR').humanize();
   }
   totalDays(array): string {
     let tempDate: string;
@@ -105,7 +107,11 @@ export class DashboardService {
       if (data.date !== tempDate) {
         tempArray.labels.push(moment(data.date).format('D/M'));
         tempDate = data.date;
-        tempCount = 1;
+        if (data.task === 'Nenhuma atividade') {
+          tempCount = 0;
+        } else {
+          tempCount = 1;
+        }
         tempArray.data.push(tempCount);
       } else {
         tempCount++;

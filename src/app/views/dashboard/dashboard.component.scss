@@ -23,6 +23,9 @@
       table {
         width: 100%;
       }
+      &.description {
+        text-transform: capitalize;
+      }
     }
   }
   &.four {

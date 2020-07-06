@@ -15,6 +15,7 @@ const VALUES = [
   {value: 'Call (Sem nenhuma participação)', viewValue: 'Call (Sem nenhuma participação)'},
   {value: 'Envio de e-mail', viewValue: 'Envio de e-mail'},
   {value: 'Git', viewValue: 'Git'},
+  {value: 'Nenhuma atividade', viewValue: 'Nenhuma atividade'},
   {value: 'Prints de tela', viewValue: 'Prints de tela'}
 ];
 
@@ -34,11 +35,14 @@ export class BottonSheetFormComponent implements OnInit {
   };
   today = new FormControl(new Date());
   sendingData: boolean = false;
+  isAllDayIdle: boolean = false;
+  tempTimeSpent = 0;
 
   constructor(private bottomSheetFormService: BottonSheetFormService, private sharedService: SharedService, @Inject(MAT_BOTTOM_SHEET_DATA) public data: any) { }
 
   ngOnInit(): void {
     this.date.timeSpent = Math.round(moment.duration(this.data.timeSpent, 'milliseconds').asMinutes());
+    this.tempTimeSpent = this.date.timeSpent;
   }
 
   registerWork(): void {
@@ -50,6 +54,16 @@ export class BottonSheetFormComponent implements OnInit {
       this.bottomSheetFormService.showMessage('Registro adicionado');
       this.sharedService.sendEvent();
     });
+  }
+
+  switchIdleness(): void {
+    if (this.isAllDayIdle) {
+      this.date.timeSpent = moment.duration(8, 'hours').asMinutes();
+      this.date.task = VALUES[5].value;
+    } else {
+      this.date.timeSpent = this.tempTimeSpent;
+      this.date.task = '';
+    }
   }
 
 }
