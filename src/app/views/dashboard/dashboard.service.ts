@@ -54,6 +54,7 @@ export class DashboardService {
   }
 
   averageHours(): string {
+    console.log(Math.round(moment.duration(this.sumMinutes, 'minutes').asHours() / this.sumDays));
     return moment.duration(moment.duration(this.sumMinutes, 'minutes').asHours() / this.sumDays, 'hours').locale('pt-BR').humanize();
   }
   totalDays(array): string {
@@ -94,6 +95,10 @@ export class DashboardService {
       }
     });
     return this.tasks;
+  }
+
+  private compare(a, b) {
+    return a - b;
   }
 
   taskByDay(array): any {
